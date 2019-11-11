@@ -12,7 +12,7 @@
     import * as Koa from "koa"
     const app = new Koa()
 
-    async function (ctx: Koa.Context, next: Function) {
+    async function (ctx: Koa.Context, next: Koa.Next) {
       // ...
     }
 
@@ -540,7 +540,12 @@ declare namespace Application {
     /**
      * This interface can be augmented by users to add types to Koa's default context
      */
-    interface DefaultContext extends DefaultContextExtends {}
+    interface DefaultContext extends DefaultContextExtends {
+        /**
+         * Custom properties.
+         */
+        [key: string]: any;
+    }
 
     type Middleware<
         StateT = DefaultState,
@@ -680,10 +685,6 @@ declare namespace Application {
          * Default error handling.
          */
         onerror(err: Error): void;
-        /**
-         * Custom properties.
-         */
-        [key: string]: any;
     }
 
     interface Request extends BaseRequest {
@@ -728,6 +729,8 @@ declare namespace Application {
     } & CustomT;
 
     interface Context extends ParameterizedContext {}
+
+    type Next = () => Promise<any>;
 }
 
 export = Application;
